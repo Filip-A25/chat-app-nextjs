@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .standard-button {
+    @apply w-52 h-14 rounded-r-full rounded-l-full hover:shadow-md transition hover:transition hover:-translate-y-1;
+  }
+}
