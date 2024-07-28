@@ -109,6 +109,16 @@ User.init({
         unique: true,
         defaultValue: null
     },
+    verify_token_expiry: {
+        type: DataTypes.DATE,
+        unique: true,
+        defaultValue: null
+    },
+    forget_password_token_expiry: {
+        type: DataTypes.DATE,
+        unique: true,
+        defaultValue: null
+    },
     createdAt: {
         type: DataTypes.DATE,
         field: "created_at"
