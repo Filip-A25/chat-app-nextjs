@@ -5,6 +5,7 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Navigate } from "@/shared";
+import { paths } from "@/app/types";
 
 export default function VerifyEmail() {
   const searchParams = useSearchParams();
@@ -41,13 +42,13 @@ export default function VerifyEmail() {
     }
   }, [token]);
 
-  if (isErrorPage) return <Navigate path="/error" />;
+  if (isErrorPage) return <Navigate path={paths.error} />;
 
   return (
     <section>
       <h1>Verification successful!</h1>
       <p>You have successfully verified your e-mail address.</p>
-      <Link href="/authentication/login">Go to login.</Link>
+      <Link href={paths.login}>Go to login.</Link>
     </section>
   );
 }

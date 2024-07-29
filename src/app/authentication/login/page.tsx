@@ -6,6 +6,7 @@ import { validation } from "@/app/authentication/const/authRequirements";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/shared";
+import { paths } from "@/app/types";
 
 interface LoginData {
   email: string;
@@ -19,7 +20,7 @@ export default function Login() {
   const onSubmit = async (data: LoginData) => {
     try {
       const response = await axios.post("/api/authentication/login", data);
-      router.push("/chat/my-chats");
+      router.push(paths.myChats);
     } catch (error: any) {
       throw new Error(error);
     }

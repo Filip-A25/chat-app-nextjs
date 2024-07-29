@@ -2,8 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: #262626;
+}
+
 @layer utilities {
   .standard-button {
-    @apply w-52 h-14 rounded-r-full rounded-l-full hover:shadow-md transition hover:transition hover:-translate-y-1;
+    @apply w-48 md:w-52 h-12 rounded-r-full rounded-l-full hover:shadow-md transition hover:transition hover:-translate-y-1 font-[500] text-sm;
   }
 }

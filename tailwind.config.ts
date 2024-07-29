@@ -9,11 +9,31 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      screens: {
+        "max-sm": {"max": "640px"}
       },
+      colors: {
+        "main-red": "#ef4444",
+        "main-orange": "#ea580c",
+        "whitesmoke": "#fafaf9",
+        "main-grey": "#262626"
+      },
+      keyframes: {
+        navbarLogoSpinAnimation: {
+          "0%": {
+            transform: "rotateZ(0deg)"
+          },
+          "50%": {
+            transform: "rotateZ(22.5deg)" 
+          },
+          "100%": {
+            transform: "rotateZ(52.5deg)"
+          }
+        }
+      },
+      animation: {
+        navbarLogoSpinAnimation: "navbarLogoSpinAnimation 150ms ease-in-out forwards" 
+      }
     },
   },
   plugins: [],

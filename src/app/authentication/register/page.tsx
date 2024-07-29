@@ -6,6 +6,7 @@ import { validation } from "@/app/authentication/const/authRequirements";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/shared";
+import { paths } from "@/app/types";
 
 interface RegisterData {
   username: string;
@@ -20,7 +21,7 @@ export default function Register() {
   const onSubmit = async (data: RegisterData) => {
     try {
       await axios.post("/api/authentication/register", data);
-      router.push("/authentication/login");
+      router.push(paths.login);
     } catch (error: any) {
       throw new Error(error);
     }
