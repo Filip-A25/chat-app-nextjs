@@ -42,7 +42,7 @@ class User extends Model {
         }
     }
 
-    static async findUser(id: string) {
+    static async findUserWithId(id: string) {
         try {
             return await User.findOne({where: {id: id}});
         } catch (error: any) {
@@ -53,6 +53,14 @@ class User extends Model {
     static async findUserWithEmail(email: string) {
         try {
             return await User.findOne({where: {email: email}});
+        } catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
+    static async findUserWithVerifyToken(token: string) {
+        try {
+            return await User.findOne({where: {verify_token: token}});
         } catch (error: any) {
             throw new Error(error);
         }
