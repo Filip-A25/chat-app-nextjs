@@ -10,7 +10,7 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <section className="min-h-[calc(100vh-50px)] sm:min-h-[calc(100vh-40px)] px-10 sm:px-0 flex flex-col justify-center items-center bg-gradient-to-br from-main-red to-main-orange">
+    <section className="h-full px-10 sm:px-0 flex flex-col justify-center items-center bg-gradient-to-br from-main-red to-main-orange">
       <div>
         <section className="flex max-sm:justify-center pb-5">
           <Image
@@ -35,7 +35,7 @@ export default function Home() {
           <Button
             title="Create a new account"
             theme="secondary"
-            handleClick={() => router.push(paths.login)}
+            handleClick={() => router.push(paths.register)}
           />
         </section>
       </div>

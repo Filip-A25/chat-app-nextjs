@@ -3,6 +3,8 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { RoutePublicGuard, RecoilRootProvider } from "@/app/components";
 import { Navbar } from "@/shared";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,8 +27,17 @@ export default function RootLayout({
         <RecoilRootProvider>
           <RoutePublicGuard>
             <main className="min-h-screen">
+              <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                hideProgressBar={true}
+                closeOnClick={true}
+                theme="light"
+              />
               <Navbar />
-              {children}
+              <section className="h-[calc(100vh-50px)] sm:h-[calc(100vh-40px)]">
+                {children}
+              </section>
             </main>
           </RoutePublicGuard>
         </RecoilRootProvider>

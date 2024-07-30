@@ -13,9 +13,13 @@ export function InputField({ label, name, validation, ...props }: Props) {
   const { register } = useFormContext();
 
   return (
-    <label>
+    <label className="text-lg md:text-xl flex flex-col py-3 w-80">
       {label}
-      <input {...register(name, validation)} {...props} />
+      <input
+        {...register(name, validation)}
+        {...props}
+        className="outline-none text-sm md:text-lg rounded-full border px-2 py-2 md:py-1"
+      />
     </label>
   );
 }
