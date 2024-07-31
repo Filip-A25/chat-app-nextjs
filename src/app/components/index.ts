@@ -1,2 +1,2 @@
 export * from './RecoilRootProvider';
-export * from './RoutePublicGuard';
+export * from './AuthRouteGuard';

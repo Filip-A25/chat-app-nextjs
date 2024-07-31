@@ -7,5 +7,5 @@ export const publicRoutesState = atom({
 
 export const privateRoutesState = atom({
     key: "privateRoutesState",
-    default: ["/my-chats", "/my-profile"]
+    default: ["/error", "/chat/my-chats", "/my-profile"]
 })

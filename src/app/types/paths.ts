@@ -3,5 +3,6 @@ export enum paths {
     error = "/error",
     register = "/authentication/register",
     login = "/authentication/login",
-    myChats = "/chat/my-chats"
+    myChats = "/chat/my-chats",
+    myProfile = "/my-profile"
 }

@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/shared";
 import { paths } from "@/app/types";
 import { notifyLoggedIn, notifyErrorMessage } from "@/app/utils/utils";
+import { loggedState } from "@/app/authentication/state";
+import { useSetRecoilState } from "recoil";
 
 interface LoginData {
   email: string;
@@ -17,10 +19,12 @@ interface LoginData {
 export default function Login() {
   const form = useForm<LoginData>();
   const router = useRouter();
+  const setIsLoggedIn = useSetRecoilState(loggedState);
 
   const onSubmit = async (data: LoginData) => {
     try {
       const response = await axios.post("/api/authentication/login", data);
+      setIsLoggedIn(true);
       notifyLoggedIn();
       router.push(paths.myChats);
     } catch (error: any) {

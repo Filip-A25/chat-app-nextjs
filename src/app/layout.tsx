@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { RoutePublicGuard, RecoilRootProvider } from "@/app/components";
+import { AuthRouteGuard, RecoilRootProvider } from "@/app/components";
 import { Navbar } from "@/shared";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={poppins.className}>
         <RecoilRootProvider>
-          <RoutePublicGuard>
+          <AuthRouteGuard>
             <main className="min-h-screen">
               <ToastContainer
                 position="top-center"
@@ -39,7 +39,7 @@ export default function RootLayout({
                 {children}
               </section>
             </main>
-          </RoutePublicGuard>
+          </AuthRouteGuard>
         </RecoilRootProvider>
       </body>
     </html>
