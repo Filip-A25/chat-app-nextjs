@@ -1,4 +1,3 @@
-import { Navbar } from "./Navbar";
 import Image from "next/image";
 import paperIcon from "@/assets/paper-plane-icon-dark.png";
 

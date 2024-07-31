@@ -1,13 +1,6 @@
-import {Sequelize, DataTypes, Model} from "sequelize";
-import { connection } from "@/database/config";
+import {DataTypes, Model} from "sequelize";
 import {UserModel} from "@/app/authentication/types";
-import pg from "pg";
-
-export const sequelize = new Sequelize(connection, {
-    quoteIdentifiers: false,
-    dialect: "postgres",
-    dialectModule: pg  
-});
+import { sequelize } from "@/database/sequelize";
 
 class User extends Model {
     static async createUser({username, email, password}: UserModel) {
