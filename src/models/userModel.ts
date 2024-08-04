@@ -132,6 +132,6 @@ User.init({
     sequelize,
     modelName: "User",
     tableName: "users"
-})
+});
 
 export {User};

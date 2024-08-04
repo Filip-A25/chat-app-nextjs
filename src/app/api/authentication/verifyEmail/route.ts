@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import {User} from "@/models/userModel";
 import { Op } from "sequelize";
+import { authenticateDb, sequelize } from "@/database";
 
 export const POST = async (req: NextRequest) => {
     try {
+        await authenticateDb(sequelize);
+
         const reqBody = await req.json();
         const {token} = reqBody;
 

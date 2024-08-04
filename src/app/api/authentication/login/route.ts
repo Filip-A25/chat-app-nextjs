@@ -2,9 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import {User} from "@/models/userModel";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { authenticateDb, sequelize } from "@/database";
 
 export const POST = async (req: NextRequest) => {
     try {
+        await authenticateDb(sequelize);
+
         const reqBody = await req.json();
         const {email, password} = reqBody;
 

@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
-import {User, sequelize} from "@/models/userModel";
-import { authenticateDb } from "@/database/config";
+import {User} from "@/models/userModel";
+import { authenticateDb, sequelize } from "@/database";
 import bcryptjs from "bcryptjs";
 import { sendMail } from "@/app/helpers/mailer";
 import { emailType } from "@/app/types/mailType";

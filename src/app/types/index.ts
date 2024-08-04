@@ -1,2 +1,2 @@
 export * from './mailType';
-export * from './paths';
+export * from './pathsType';

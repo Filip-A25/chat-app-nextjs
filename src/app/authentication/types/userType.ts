@@ -10,3 +10,9 @@ export interface UserModel extends UserData {
     verifyToken?: string;
     forgetPasswordToken?: string;
 }
+
+export interface UserTokenData {
+    id: string;
+    username: string;
+    email: string;
+}

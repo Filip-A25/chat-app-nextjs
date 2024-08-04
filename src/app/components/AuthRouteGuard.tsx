@@ -1,8 +1,8 @@
 "use client";
 
 import React, { PropsWithChildren, useEffect, useState } from "react";
-import { loggedState } from "@/app/authentication/state";
-import { useRecoilValue, useRecoilState } from "recoil";
+import { loggedState, userDataState } from "@/app/authentication/state";
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil";
 import { Navigate, PageLoading } from "@/shared";
 import { usePathname } from "next/navigation";
 import { publicRoutesState, privateRoutesState } from "@/app/state";
@@ -15,12 +15,20 @@ export const AuthRouteGuard: React.FC<PropsWithChildren> = ({ children }) => {
   const publicRoutes = useRecoilValue(publicRoutesState);
   const privateRoutes = useRecoilValue(privateRoutesState);
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const setUserData = useSetRecoilState(userDataState);
 
   useEffect(() => {
     const getLoggedState = async () => {
       try {
         const response = await axios.get("/api/authentication/token");
         if (!response.data.tokenData) return;
+
+        setUserData({
+          id: response.data.tokenData.id,
+          username: response.data.tokenData.username,
+          email: response.data.tokenData.email,
+        });
+
         setIsLoggedIn(true);
       } catch (error: any) {
         throw new Error(error.message);
