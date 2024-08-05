@@ -28,7 +28,7 @@ export function Navbar() {
   };
 
   return (
-    <nav className="h-[50px] sm:h-[40px] bg-main-grey w-screen px-5 sm:px-12 flex items-center justify-between">
+    <nav className="h-[50px] sm:h-[40px] bg-main-grey w-screen px-5 sm:px-8 flex items-center justify-between">
       <section>
         <Link href={paths.home} className="flex group group-hover:transition">
           <Image

@@ -1,74 +1,16 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
-import axios from "axios";
-import { userDataState } from "@/app/authentication/state";
+import { useState, useEffect } from "react";
 import { ChatMessage } from "@/app/chat/types";
 import { io } from "socket.io-client";
+import { Sidebar, ChatHeader, InputContainer } from "@/app/chat/components";
 
 const socket = io(process.env.NEXT_PUBLIC_SOCKET_IO_SERVER_DOMAIN!, {
   withCredentials: true,
 });
-console.log(socket);
 
 export default function MyChats() {
-  const userData = useRecoilValue(userDataState);
-  const [searchedUsername, setSearchedUsername] = useState("");
-  const [searchedUserId, setSearchedUserId] = useState("");
-  const [message, setMessage] = useState("");
   const [chat, setChat] = useState<ChatMessage[]>([]);
-
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchedUsername(e.target.value);
-  };
-
-  const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value);
-  };
-
-  const startChatSocket = (chatId: string) => {
-    socket.emit("join_chat", chatId);
-  };
-
-  const sendMessageSocket = (chatId: string) => {
-    socket.emit("send_message", {
-      chatId,
-      userId: userData.id,
-      username: userData.username,
-      message,
-    });
-  };
-
-  const searchUser = async () => {
-    try {
-      const response = await axios.get("/api/chat/searchUser", {
-        params: { username: searchedUsername },
-      });
-      setSearchedUserId(response.data.userId);
-      return;
-    } catch (error: any) {
-      throw new Error(error.message);
-    }
-  };
-
-  const createAndEmitMessage = async () => {
-    try {
-      const response = await axios.post("/api/chat/chat");
-      startChatSocket(response.data.chatId);
-      await sendMessageSocket(response.data.chatId);
-      setSearchedUserId("");
-      setMessage("");
-    } catch (error: any) {
-      throw new Error(error.message);
-    }
-  };
-
-  const handleMessageSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    searchUser();
-    createAndEmitMessage();
-  };
 
   useEffect(() => {
     const handleReceiveMessage = (data: ChatMessage) => {
@@ -84,7 +26,9 @@ export default function MyChats() {
   }, []);
 
   return (
-    <section className="h-full flex flex-col justify-center items-center">
+    <section className="h-full flex flex-col justify-center items-center relative">
+      <Sidebar />
+      <ChatHeader />
       <section>
         <div>
           {chat.map(({ username, message, timestamp }, index) => (
@@ -95,21 +39,7 @@ export default function MyChats() {
           ))}
         </div>
         <div>
-          <form id="message-form" onSubmit={handleMessageSubmit}>
-            <label>User:</label>
-            <input
-              type="text"
-              placeholder="Search for users..."
-              value={searchedUsername}
-              onChange={handleSearchChange}
-            />
-            <label>Message:</label>
-            <textarea
-              placeholder="Write your message here..."
-              onChange={handleMessageChange}
-            ></textarea>
-            <button>Send</button>
-          </form>
+          <InputContainer socket={socket} />
         </div>
       </section>
     </section>
