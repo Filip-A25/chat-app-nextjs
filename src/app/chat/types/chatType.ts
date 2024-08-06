@@ -5,3 +5,9 @@ export interface ChatMessage {
     message: string;
     timestamp: DateDataType;
 }
+
+export interface Messenger {
+    userId: string;
+    username: string;
+    isActive?: boolean;
+}

@@ -43,6 +43,7 @@ app.prepare().then(() => {
     
     httpServer.on("error", (error) => {
         console.log("ERROR: ", error);
+        process.exit(1);
     })
 
     httpServer.listen(port, () => {

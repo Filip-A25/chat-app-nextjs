@@ -3,6 +3,7 @@ import clsx from "clsx";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   isWide?: boolean;
+  isDarkThemed?: boolean;
 }
 
 export function TextInput({
@@ -11,6 +12,7 @@ export function TextInput({
   value,
   onChange,
   isWide,
+  isDarkThemed,
 }: Props) {
   return (
     <input
@@ -19,8 +21,9 @@ export function TextInput({
       value={value}
       onChange={onChange}
       className={clsx(
-        "mr-5 my-1 rounded-full outline-none bg-[#f2f2f2] px-4 py-2",
-        isWide && "flex-grow"
+        "my-1 rounded-full outline-none px-4 py-2",
+        isWide && "flex-grow",
+        isDarkThemed ? "bg-main-grey text-whitesmoke" : "bg-[#f2f2f2]"
       )}
     />
   );
