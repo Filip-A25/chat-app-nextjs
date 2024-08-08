@@ -9,22 +9,50 @@ import {
   InputContainer,
   MessageCard,
 } from "@/app/chat/components";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { activeMessengerState } from "@/app/chat/state";
 import { userDataState } from "@/app/authentication/state";
 
 const socket = io(process.env.NEXT_PUBLIC_SOCKET_IO_SERVER_DOMAIN!, {
   withCredentials: true,
+  autoConnect: false,
 });
 
 export default function MyChats() {
   const [chat, setChat] = useState<ChatMessage[]>([]);
   const currentMessenger = useRecoilValue(activeMessengerState);
-  const user = useRecoilValue(userDataState);
+  const [user, setUser] = useRecoilState(userDataState);
 
   useEffect(() => {
-    const handleReceiveMessage = (data: ChatMessage) => {
-      setChat((prevValue) => [...prevValue, data]);
+    if (!user?.socketSessionId) {
+      const username = user.username;
+      const userId = user.id;
+
+      socket.auth = { userId, username };
+    }
+
+    socket.connect();
+  }, [user]);
+
+  useEffect(() => {
+    const receiveSessionId = (id: string) => {
+      socket.auth = { id };
+      setUser((prevValue) => ({
+        ...prevValue,
+        sessionId: id,
+      }));
+    };
+
+    socket.on("session", receiveSessionId);
+
+    return () => {
+      socket.off("session", receiveSessionId);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleReceiveMessage = ({ message, username }: ChatMessage) => {
+      setChat((prevValue) => [...prevValue, { username, message }]);
     };
 
     socket.on("receive_message", handleReceiveMessage);

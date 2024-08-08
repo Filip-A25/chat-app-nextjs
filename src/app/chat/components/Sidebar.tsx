@@ -24,7 +24,7 @@ export function Sidebar({ socket }: { socket: Socket }) {
             />
           ))
         ) : (
-          <div className="px-8 text-center py-14">
+          <div className="px-8 text-center py-6">
             <span className="text-[#7a7a7a]">
               You aren not chatting to anybody.
             </span>

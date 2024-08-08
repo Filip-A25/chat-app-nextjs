@@ -8,8 +8,6 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export function UserCard({ userId, username, isActive }: Props) {
-  console.log(userId, username, isActive);
-
   return (
     <button className={clsx("w-full", isActive && "bg-[#434343]")}>
       <li className="flex py-3 px-8">
