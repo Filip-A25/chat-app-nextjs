@@ -1,29 +1,59 @@
-import { Chat, ChatLine, User } from "./";
+import { Chat, ChatMessage, User } from "./";
 
-User.hasMany(ChatLine, {
+User.hasMany(ChatMessage, {
+    foreignKey: {
+        name: "from",
+        allowNull: false
+    }
+});
+
+User.hasMany(Chat, {
+    foreignKey: {
+        name: "user_id",
+        allowNull: false        
+    }
+});
+
+User.hasMany(Chat, {
+    foreignKey: {
+        name: "messenger_id",
+        allowNull: false
+    }
+});
+
+Chat.belongsTo(User, {
     foreignKey: {
         name: "user_id",
         allowNull: false
     }
 });
-ChatLine.belongsTo(User, {
+
+Chat.belongsTo(User, {
     foreignKey: {
-        name: "user_id",
+        name: "messenger_id",
         allowNull: false
     }
 });
 
-Chat.hasMany(ChatLine, {
+ChatMessage.belongsTo(User, {
+    foreignKey: {
+        name: "from",
+        allowNull: false
+    }
+});
+
+Chat.hasMany(ChatMessage, {
     foreignKey: {
         name: "chat_id",
         allowNull: false
     }
 });
-ChatLine.belongsTo(Chat, {
+
+ChatMessage.belongsTo(Chat, {
     foreignKey: {
         name: "chat_id",
         allowNull: false
     }
 });
 
-export {User, Chat, ChatLine};
+export {User, Chat, ChatMessage};

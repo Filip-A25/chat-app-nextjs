@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChatMessage } from "@/app/chat/types";
+import { ChatMessage, ReceivedMessage } from "@/app/chat/types";
 import { io } from "socket.io-client";
 import {
   Sidebar,
@@ -10,7 +10,7 @@ import {
   MessageCard,
 } from "@/app/chat/components";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { activeMessengerState } from "@/app/chat/state";
+import { activeMessengerState, messengerArrayState } from "@/app/chat/state";
 import { userDataState } from "@/app/authentication/state";
 
 const socket = io(process.env.NEXT_PUBLIC_SOCKET_IO_SERVER_DOMAIN!, {
@@ -22,6 +22,11 @@ export default function MyChats() {
   const [chat, setChat] = useState<ChatMessage[]>([]);
   const currentMessenger = useRecoilValue(activeMessengerState);
   const [user, setUser] = useRecoilState(userDataState);
+  const [messengers, setMessengers] = useRecoilState(messengerArrayState);
+
+  const addMessageToChat = ({ message, username }: ChatMessage) => {
+    setChat((prevValue) => [...prevValue, { message, username }]);
+  };
 
   useEffect(() => {
     if (!user?.socketSessionId) {
@@ -51,14 +56,45 @@ export default function MyChats() {
   }, []);
 
   useEffect(() => {
-    const handleReceiveMessage = ({ message, username }: ChatMessage) => {
-      setChat((prevValue) => [...prevValue, { username, message }]);
+    const handleReceiveMessage = ({
+      message,
+      senderId,
+      senderUsername,
+    }: ReceivedMessage) => {
+      const containsMessengers = messengers.length > 0 ? true : false;
+      const hasIdenticalMessenger = messengers.some(
+        (messenger) => messenger.messengerId === senderId
+      );
+
+      if (!hasIdenticalMessenger) {
+        setMessengers((prevValue) => [
+          ...prevValue,
+          {
+            messengerId: senderId,
+            username: senderUsername,
+            isActive: containsMessengers ? false : true,
+          },
+        ]);
+      }
+      addMessageToChat({ message, username: senderUsername });
     };
 
     socket.on("receive_message", handleReceiveMessage);
 
     return () => {
       socket.off("receive_message", handleReceiveMessage);
+    };
+  }, [messengers]);
+
+  useEffect(() => {
+    const handleReceiveSentMessage = ({ message, username }: ChatMessage) => {
+      addMessageToChat({ message, username });
+    };
+
+    socket.on("receive_sent_message", handleReceiveSentMessage);
+
+    return () => {
+      socket.off("receive_sent_message", handleReceiveSentMessage);
     };
   }, []);
 

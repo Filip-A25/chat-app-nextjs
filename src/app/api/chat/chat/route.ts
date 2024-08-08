@@ -1,12 +1,15 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { sequelize, authenticateDb } from "@/database";
 import { Chat } from "@/models";
 
-export const POST = async () => {
+export const POST = async (req: NextRequest) => {
     try {
         await authenticateDb(sequelize);
 
-        const response = await Chat.createChat();
+        const reqBody = await req.json();
+        const {userId, messengerId} = reqBody;
+
+        const response = await Chat.createChat({userId, messengerId});
         const chatId = response.dataValues.id;
 
         return NextResponse.json({message: "A new chat has been created.", status: 201, chatId});

@@ -6,9 +6,15 @@ export interface ChatMessage {
     timestamp?: DateDataType;
 }
 
+export interface ReceivedMessage {
+    senderId: string;
+    senderUsername: string;
+    message: string; 
+}
+
 export interface Messenger {
-    userId: string;
+    messengerId: string;
     username: string;
-    socketId: string;
     isActive?: boolean;
+    messages?: ChatMessage[];
 }

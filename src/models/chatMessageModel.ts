@@ -5,7 +5,7 @@ import { Message } from "@/app/chat/types/messageType";
 class ChatMessage extends Model {
     static async createChatMessage({chatId, userId, message}: Message) {
         try {
-            return await ChatMessage.create({chat_id: chatId, user_id: userId, message});            
+            return await ChatMessage.create({from: userId, message, chat_id: chatId});            
         } catch (error: any) {
             throw new Error(error.message);
         }
@@ -13,14 +13,7 @@ class ChatMessage extends Model {
 }
 
 ChatMessage.init({
-    chat_id: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        validate: {
-            notEmpty: true
-        }
-    },
-    user_id: {
+    from: {
         type: DataTypes.UUID,
         allowNull: false,
         validate: {
@@ -41,6 +34,13 @@ ChatMessage.init({
     updatedAt: {
         type: DataTypes.DATE,
         field: "updated_at"
+    },
+    chat_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     }
 }, {
     sequelize,

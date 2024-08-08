@@ -11,7 +11,7 @@ export function InputContainer({ socket }: { socket: Socket }) {
   const onSubmit = ({ message }: { message: string }) => {
     socket.emit("private_message", {
       message,
-      receiverId: messenger?.socketId,
+      receiverId: messenger?.messengerId,
     });
   };
 

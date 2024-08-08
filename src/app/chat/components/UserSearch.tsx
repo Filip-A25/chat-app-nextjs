@@ -1,42 +1,45 @@
 import { useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { TextInput } from "./";
-import axios from "axios";
-import { useSetRecoilState, useRecoilState } from "recoil";
-import { messengerArrayState, chatIdState } from "@/app/chat/state";
+import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
+import {
+  messengerArrayState,
+  chatIdState,
+  activeMessengerState,
+} from "@/app/chat/state";
 import { userDataState } from "@/app/authentication/state";
 import { Socket } from "socket.io-client";
 import { Messenger } from "@/app/chat/types";
+import axios from "axios";
 
 export function UserSearch({ socket }: { socket: Socket }) {
   const form = useForm<{ username: string }>();
   const [messengers, setMessengers] = useRecoilState(messengerArrayState);
   const setChatId = useSetRecoilState(chatIdState);
-  const setUserInChat = useSetRecoilState(userDataState);
+  const user = useRecoilValue(userDataState);
 
   const searchUser = (searchedUser: string) => {
     socket.emit("find_user", searchedUser);
   };
 
-  const createNewChat = async () => {
+  const createNewChat = async (messengerId: string) => {
     try {
-      const response = await axios.post("/api/chat/chat");
+      const response = await axios.post("/api/chat/chat", {
+        userId: user.id,
+        messengerId,
+      });
+      console.log(response);
       setChatId(response.data.chatId);
-      socket.emit("join_chat", response.data.chatId);
-      setUserInChat((rest) => ({
-        ...rest,
-        activeChatRoom: response.data.chatId,
-      }));
     } catch (error: any) {
       throw new Error(error.message);
     }
   };
 
   const onSubmit = ({ username }: { username: string }) => {
-    const exists = messengers.find(
+    const messengerExists = messengers.find(
       (messenger) => messenger.username === username
     );
-    if (exists) {
+    if (messengerExists) {
       const newMessengerArray = messengers.map((messenger) => {
         if (messenger.username === username)
           return { ...messenger, isActive: true };
@@ -47,20 +50,20 @@ export function UserSearch({ socket }: { socket: Socket }) {
       return;
     }
     searchUser(username);
-    createNewChat();
   };
 
   useEffect(() => {
-    const handleGetMessenger = ({ userId, username, socketId }: Messenger) => {
+    const handleGetMessenger = ({ messengerId, username }: Messenger) => {
       setMessengers((prevValue) => [
         ...prevValue,
         {
-          userId,
+          messengerId,
           username,
-          socketId,
           isActive: true,
         },
       ]);
+
+      createNewChat(messengerId);
     };
 
     if (socket) {

@@ -15,10 +15,10 @@ export function Sidebar({ socket }: { socket: Socket }) {
       </header>
       <ul>
         {Boolean(messengersArray.length) ? (
-          messengersArray.map(({ userId, username, isActive }, index) => (
+          messengersArray.map(({ messengerId, username, isActive }, index) => (
             <UserCard
               key={index}
-              userId={userId}
+              userId={messengerId}
               username={username}
               isActive={isActive}
             />

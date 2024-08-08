@@ -46,23 +46,20 @@ app.prepare().then(() => {
     })
 
     io.on("connection", (socket) => {
-        console.log(`User ${socket.sessionId} connected.`);
+        console.log(`User ${socket.userId} connected.`);
 
         socket.emit("session", {
             sessionId: socket.sessionId
         })
 
-        socket.on("join_chat", (chatId) => {
-            socket.join(chatId);
-        });
+        socket.join(socket.userId);
 
         socket.on("find_user", (username) => {
             let searchedUser;
 
             for (let [id, socket] of io.of("/").sockets) {
                 if (socket.username === username) {
-
-                    searchedUser = {userId: socket.userId, username: socket.username, socketId: id};
+                    searchedUser = {messengerId: socket.userId, username: socket.username};
                     break;
                 }
             }
@@ -76,11 +73,12 @@ app.prepare().then(() => {
         socket.on("private_message", ({message, receiverId}) => {
             io.to(receiverId).emit("receive_message", {
                 message,
-                username: socket.id,
+                senderId: socket.userId,
+                senderUsername: socket.username,
                 to: receiverId
             })
         
-            socket.emit("receive_message", {username: socket.username, message});
+            socket.emit("receive_sent_message", {username: socket.username, message});
         })
 
         socket.on("disconnect", () => {
