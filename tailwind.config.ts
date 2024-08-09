@@ -16,7 +16,9 @@ const config: Config = {
         "main-red": "#ef4444",
         "main-orange": "#ea580c",
         "whitesmoke": "#fafaf9",
-        "main-grey": "#262626"
+        "main-grey": "#262626",
+        "light-grey": "#7a7a7a",
+        "sidebar-grey": "#353535"
       },
       keyframes: {
         navbarLogoSpinAnimation: {

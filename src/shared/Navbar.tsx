@@ -7,7 +7,7 @@ import { paths } from "@/app/types";
 import paperIcon from "@/assets/paper-plane-icon-light.png";
 import { loggedState } from "@/app/authentication/state";
 import { useRecoilState } from "recoil";
-import { notifyErrorMessage, notifyLoggedOut } from "@/app/utils/utils";
+import { notifyErrorMessage, notifyLoggedOut } from "@/app/utils";
 import axios from "axios";
 import clsx from "clsx";
 

@@ -3,9 +3,9 @@ import { sequelize } from "@/database/sequelize";
 import { Message } from "@/app/chat/types/messageType";
 
 class ChatMessage extends Model {
-    static async createChatMessage({chatId, userId, message}: Message) {
+    static async createChatMessage({chatId, senderId, message}: Message) {
         try {
-            return await ChatMessage.create({from: userId, message, chat_id: chatId});            
+            return await ChatMessage.create({from: senderId, message, chat_id: chatId});            
         } catch (error: any) {
             throw new Error(error.message);
         }

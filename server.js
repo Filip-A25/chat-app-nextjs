@@ -70,15 +70,22 @@ app.prepare().then(() => {
             socket.emit("get_user", searchedUser);
         })
 
-        socket.on("private_message", ({message, receiverId}) => {
-            io.to(receiverId).emit("receive_message", {
-                message,
-                senderId: socket.userId,
-                senderUsername: socket.username,
-                to: receiverId
-            })
-        
-            socket.emit("receive_sent_message", {username: socket.username, message});
+        socket.on("private_message", async ({message, receiverId, chatId}) => {
+            try {
+                const newMessage = {
+                    chatId,
+                    senderId: socket.userId,
+                    message,
+                }
+                const response = await axios.post("http://localhost:3000/api/chat/message", newMessage);
+
+                io.to(receiverId).emit("receive_message", {...newMessage, senderUsername: socket.username, to: receiverId, timestamp: response.data.created_at});
+            
+                socket.emit("receive_sent_message", {username: socket.username, message, timestamp: response.data.created_at});
+            } catch (error) {
+                console.log(error.message);
+                throw new Error(error.message);
+            }
         })
 
         socket.on("disconnect", () => {

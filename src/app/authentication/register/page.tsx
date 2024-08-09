@@ -7,7 +7,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/shared";
 import { paths } from "@/app/types";
-import { notifyCreateAccount, notifyErrorMessage } from "@/app/utils/utils";
+import { notifyCreateAccount, notifyErrorMessage } from "@/app/utils";
 
 interface RegisterData {
   username: string;

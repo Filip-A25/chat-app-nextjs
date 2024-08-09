@@ -50,7 +50,7 @@ export const AuthRouteGuard: React.FC<PropsWithChildren> = ({ children }) => {
     };
   }, []);
 
-  if (isPageLoading) return <PageLoading />;
+  if (isPageLoading) return <PageLoading isFullScreen />;
 
   if (!publicRoutes.includes(pathname) && !privateRoutes.includes(pathname)) {
     return <Navigate path={paths.error} />;

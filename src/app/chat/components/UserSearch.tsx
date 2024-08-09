@@ -5,7 +5,7 @@ import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
 import {
   messengerArrayState,
   chatIdState,
-  activeMessengerState,
+  messengerFetchingState,
 } from "@/app/chat/state";
 import { userDataState } from "@/app/authentication/state";
 import { Socket } from "socket.io-client";
@@ -17,6 +17,7 @@ export function UserSearch({ socket }: { socket: Socket }) {
   const [messengers, setMessengers] = useRecoilState(messengerArrayState);
   const setChatId = useSetRecoilState(chatIdState);
   const user = useRecoilValue(userDataState);
+  const setIsMessengerFetching = useSetRecoilState(messengerFetchingState);
 
   const searchUser = (searchedUser: string) => {
     socket.emit("find_user", searchedUser);
@@ -28,14 +29,16 @@ export function UserSearch({ socket }: { socket: Socket }) {
         userId: user.id,
         messengerId,
       });
-      console.log(response);
       setChatId(response.data.chatId);
     } catch (error: any) {
       throw new Error(error.message);
+    } finally {
+      setIsMessengerFetching(false);
     }
   };
 
   const onSubmit = ({ username }: { username: string }) => {
+    setIsMessengerFetching(true);
     const messengerExists = messengers.find(
       (messenger) => messenger.username === username
     );

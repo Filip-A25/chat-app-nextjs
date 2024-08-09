@@ -13,3 +13,8 @@ export const activeMessengerState = selector<Messenger | undefined>({
         return messengers?.find(messenger => messenger.isActive);
     }
 })
+
+export const messengerFetchingState = atom({
+    key: "chat.messengerFetchingState",
+    default: true
+})

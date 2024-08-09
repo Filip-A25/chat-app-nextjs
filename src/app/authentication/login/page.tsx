@@ -7,7 +7,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/shared";
 import { paths } from "@/app/types";
-import { notifyLoggedIn, notifyErrorMessage } from "@/app/utils/utils";
+import { notifyLoggedIn, notifyErrorMessage } from "@/app/utils";
 import { loggedState } from "@/app/authentication/state";
 import { useSetRecoilState } from "recoil";
 
