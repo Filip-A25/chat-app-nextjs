@@ -1,82 +1,10 @@
-import { useEffect } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { FormProvider } from "react-hook-form";
 import { TextInput } from "./";
-import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
-import {
-  messengerArrayState,
-  chatIdState,
-  messengerFetchingState,
-} from "@/app/chat/state";
-import { userDataState } from "@/app/authentication/state";
 import { Socket } from "socket.io-client";
-import { Messenger } from "@/app/chat/types";
-import axios from "axios";
+import { useSearchUser } from "@/app/chat/hooks";
 
 export function UserSearch({ socket }: { socket: Socket }) {
-  const form = useForm<{ username: string }>();
-  const [messengers, setMessengers] = useRecoilState(messengerArrayState);
-  const setChatId = useSetRecoilState(chatIdState);
-  const user = useRecoilValue(userDataState);
-  const setIsMessengerFetching = useSetRecoilState(messengerFetchingState);
-
-  const searchUser = (searchedUser: string) => {
-    socket.emit("find_user", searchedUser);
-  };
-
-  const createNewChat = async (messengerId: string) => {
-    try {
-      const response = await axios.post("/api/chat/chat", {
-        userId: user.id,
-        messengerId,
-      });
-      setChatId(response.data.chatId);
-    } catch (error: any) {
-      throw new Error(error.message);
-    } finally {
-      setIsMessengerFetching(false);
-    }
-  };
-
-  const onSubmit = ({ username }: { username: string }) => {
-    setIsMessengerFetching(true);
-    const messengerExists = messengers.find(
-      (messenger) => messenger.username === username
-    );
-    if (messengerExists) {
-      const newMessengerArray = messengers.map((messenger) => {
-        if (messenger.username === username)
-          return { ...messenger, isActive: true };
-        else return { ...messenger, isActive: false };
-      });
-
-      setMessengers(newMessengerArray);
-      return;
-    }
-    searchUser(username);
-  };
-
-  useEffect(() => {
-    const handleGetMessenger = ({ messengerId, username }: Messenger) => {
-      setMessengers((prevValue) => [
-        ...prevValue,
-        {
-          messengerId,
-          username,
-          isActive: true,
-        },
-      ]);
-
-      createNewChat(messengerId);
-    };
-
-    if (socket) {
-      socket.on("get_user", handleGetMessenger);
-    }
-
-    return () => {
-      socket.off("get_user", handleGetMessenger);
-    };
-  }, []);
+  const { form, onSubmit } = useSearchUser(socket);
 
   return (
     <div className="w-full absolute bottom-0 py-3">

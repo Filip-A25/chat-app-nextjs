@@ -2,18 +2,17 @@ import { Socket } from "socket.io-client";
 import { TextInput } from "./";
 import { useForm, FormProvider } from "react-hook-form";
 import { useRecoilValue } from "recoil";
-import { activeMessengerState, chatIdState } from "@/app/chat/state";
+import { activeMessengerState } from "@/app/chat/state";
 
 export function InputContainer({ socket }: { socket: Socket }) {
   const form = useForm<{ message: string }>();
   const messenger = useRecoilValue(activeMessengerState);
-  const chatId = useRecoilValue(chatIdState);
 
   const onSubmit = ({ message }: { message: string }) => {
     socket.emit("private_message", {
       message,
       receiverId: messenger?.messengerId,
-      chatId,
+      chatId: messenger?.chatId,
     });
   };
 
