@@ -23,7 +23,7 @@ export function useChat(socket: Socket) {
   };
 
   useEffect(() => {
-    if (!user?.socketSessionId) {
+    if (!user.socketSessionId) {
       const username = user.username;
       const userId = user.id;
 

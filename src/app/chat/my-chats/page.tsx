@@ -24,7 +24,7 @@ export default function MyChats() {
       <Sidebar socket={socket} />
       <section
         className={clsx(
-          "w-full md:w-[calc(100vw-30vw)] lg:w-[calc(100vw-25vw)] xl:w-[calc(100vw-20vw)] h-full absolute right-0",
+          "w-full md:w-[calc(100vw-30vw)] lg:w-[calc(100vw-25vw)] xl:w-[calc(100vw-20vw)] h-full absolute right-0 overflow-y-hidden",
           !currentMessenger || isMessengerFetching
             ? "flex justify-center items-center"
             : ""
@@ -39,7 +39,7 @@ export default function MyChats() {
         ) : (
           <>
             <ChatHeader username={currentMessenger.username} />
-            <div className="w-full px-6 sm:px-10 md:px-12 py-3 sm:py-4 md:py-6 absolute top-16">
+            <div className="w-full h-4/5 px-6 md:px-8 py-3 sm:py-4 md:pt-4 md:pb-3 absolute bottom-16 top-17 overflow-y-scroll">
               {chat.map(({ username, message, timestamp }, index) => (
                 <MessageCard
                   key={index}
