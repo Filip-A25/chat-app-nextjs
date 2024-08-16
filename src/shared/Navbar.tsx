@@ -5,15 +5,15 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { paths } from "@/app/types";
 import paperIcon from "@/assets/paper-plane-icon-light.png";
-import { loggedState } from "@/app/authentication/state";
-import { useRecoilState } from "recoil";
+import { loggedState, userDataState } from "@/app/authentication/state";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { notifyErrorMessage, notifyLoggedOut } from "@/app/utils";
 import axios from "axios";
-import clsx from "clsx";
 
 export function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loggedState);
   const router = useRouter();
+  const user = useRecoilValue(userDataState);
 
   const handleLogout = async () => {
     try {
@@ -42,19 +42,22 @@ export function Navbar() {
           </span>
         </Link>
       </section>
-      <section
-        className={clsx(
-          "flex w-32 sm:w-36",
-          isLoggedIn ? "justify-end" : "justify-between"
-        )}
-      >
+      <section className="flex w-32 sm:w-40 justify-between">
         {isLoggedIn ? (
-          <button
-            onClick={handleLogout}
-            className="text-whitesmoke hover:text-red-400 hover:transition"
-          >
-            Logout
-          </button>
+          <>
+            <Link
+              href={paths.myProfile}
+              className="text-whitesmoke transition hover:text-red-400 hover:transition"
+            >
+              Profile
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="text-whitesmoke hover:text-red-400 hover:transition"
+            >
+              Logout
+            </button>
+          </>
         ) : (
           <>
             <Link

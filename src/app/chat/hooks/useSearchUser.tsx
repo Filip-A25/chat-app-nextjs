@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { userDataState } from "@/app/authentication/state";
@@ -12,6 +12,7 @@ export function useSearchUser(socket: Socket) {
   const [messengers, setMessengers] = useRecoilState(messengerArrayState);
   const user = useRecoilValue(userDataState);
   const setIsMessengerFetching = useSetRecoilState(messengerFetchingState);
+  const [chatId, setChatId] = useState("");
 
   const searchUser = (searchedUser: string) => {
     socket.emit("find_user", searchedUser);
@@ -23,6 +24,20 @@ export function useSearchUser(socket: Socket) {
         userId: user.id,
         messengerId,
       });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  };
+
+  const checkIfChatExists = async (messengerId: string) => {
+    try {
+      const response = await axios.get("/api/chat/searchChat", {
+        params: {
+          messengerId,
+        },
+      });
+      const chatId = response.data.chatId;
+      return chatId ? chatId : false;
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -49,14 +64,18 @@ export function useSearchUser(socket: Socket) {
   useEffect(() => {
     const handleGetMessenger = async ({ messengerId, username }: Messenger) => {
       try {
-        const response = await createNewChat(messengerId);
+        const chat = await checkIfChatExists(messengerId);
+        if (!chat) {
+          const response = await createNewChat(messengerId);
+          setChatId(response.data.chatId);
+        }
         setMessengers((prevValue) => [
           ...prevValue,
           {
             messengerId,
             username,
             isActive: true,
-            chatId: response.data.chatId,
+            chatId,
           },
         ]);
       } catch (error: any) {

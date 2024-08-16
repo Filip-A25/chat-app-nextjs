@@ -4,5 +4,5 @@ export enum paths {
     register = "/authentication/register",
     login = "/authentication/login",
     myChats = "/chat/my-chats",
-    myProfile = "/my-profile"
+    myProfile = "/profile"
 }

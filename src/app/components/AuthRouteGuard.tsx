@@ -52,7 +52,11 @@ export const AuthRouteGuard: React.FC<PropsWithChildren> = ({ children }) => {
 
   if (isPageLoading) return <PageLoading isFullScreen />;
 
-  if (!publicRoutes.includes(pathname) && !privateRoutes.includes(pathname)) {
+  if (
+    !publicRoutes.includes(pathname) &&
+    !privateRoutes.includes(pathname) &&
+    !pathname.includes("/profile")
+  ) {
     return <Navigate path={paths.error} />;
   }
 
@@ -60,7 +64,11 @@ export const AuthRouteGuard: React.FC<PropsWithChildren> = ({ children }) => {
     return <Navigate path={paths.home} />;
   }
 
-  if (isLoggedIn && !privateRoutes.includes(pathname)) {
+  if (
+    isLoggedIn &&
+    !privateRoutes.includes(pathname) &&
+    !pathname.includes("/profile")
+  ) {
     return <Navigate path={paths.myChats} />;
   }
 

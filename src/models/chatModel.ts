@@ -1,4 +1,4 @@
-import { Model, DataTypes } from "sequelize";
+import { Model, DataTypes, Op } from "sequelize";
 import { sequelize } from "@/database/sequelize";
 
 interface Props {
@@ -14,6 +14,21 @@ class Chat extends Model {
             throw new Error(error.message);
         }
     }
+
+    static async findChat(messengerId: string) {
+        try {
+            return await Chat.findOne({
+                where: {
+                    [Op.or]: [
+                        {user_id: messengerId},
+                        {messenger_id: messengerId}
+                    ]
+                }
+            })
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    } 
 }
 
 Chat.init({

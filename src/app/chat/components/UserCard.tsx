@@ -11,7 +11,7 @@ export function UserCard({ userId, username, isActive }: Props) {
   return (
     <button className={clsx("w-full", isActive && "bg-[#434343]")}>
       <li className="flex py-3 px-8">
-        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-main-red to-main-orange"></div>
+        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-main-red to-main-orange" />
         <div className="flex items-center px-4">
           <span
             className={clsx("text-whitesmoke", isActive && "font-semibold")}
