@@ -14,13 +14,13 @@ export function InputField({ label, name, validation, ...props }: Props) {
 
   return (
     <div className="py-2">
-      <label className="text-lg md:text-xl flex flex-col py-2 px-1">
+      <label className="text-md md:text-lg flex flex-col py-2 px-1">
         {label}
       </label>
       <input
         {...register(name, validation)}
         {...props}
-        className="outline-none text-sm md:text-lg rounded-full border px-3 py-2 w-80"
+        className="outline-none text-sm md:text-md rounded-full border px-3 py-2 w-80"
       />
     </div>
   );

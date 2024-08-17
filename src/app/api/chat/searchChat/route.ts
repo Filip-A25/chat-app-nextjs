@@ -1,5 +1,5 @@
+import { NextResponse, NextRequest } from "next/server";
 import { authenticateDb, sequelize } from "@/database";
-import { NextRequest, NextResponse } from "next/server";
 import { Chat } from "@/models";
 
 export const GET = async (req: NextRequest) => {

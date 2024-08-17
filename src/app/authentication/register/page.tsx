@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm, FormProvider } from "react-hook-form";
-import { InputField } from "@/app/authentication/components";
+import { InputField } from "@/shared";
 import { validation } from "@/app/authentication/const/authRequirements";
 import axios from "axios";
 import { useRouter } from "next/navigation";

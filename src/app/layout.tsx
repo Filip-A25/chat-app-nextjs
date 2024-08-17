@@ -35,7 +35,7 @@ export default function RootLayout({
                 theme="light"
               />
               <Navbar />
-              <section className="h-[calc(100vh-50px)] sm:h-[calc(100vh-40px)]">
+              <section className="h-[calc(100vh-55px)] sm:h-[calc(100vh-50px)]">
                 {children}
               </section>
             </main>
