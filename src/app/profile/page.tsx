@@ -11,8 +11,6 @@ export default function Profile() {
   const user = useRecoilValue(userDataState);
 
   const handleRedirectToMyProfile = () => {
-    console.log("ayo");
-    console.log(user.id);
     router.push(`/profile/${user.id}`);
   };
 

@@ -3,7 +3,6 @@ import {User} from "@/models/userModel";
 import { authenticateDb, sequelize } from "@/database";
 import bcryptjs from "bcryptjs";
 import { sendMail } from "@/app/helpers/mailer";
-import { emailType } from "@/app/types/mailType";
 
 export const POST = async (req: NextRequest) => {
     try {
@@ -23,7 +22,7 @@ export const POST = async (req: NextRequest) => {
 
         const newUser = await User.create({username, email, password: passwordHash});
     
-        await sendMail({email, userId: newUser.dataValues.id, type: emailType.verify})
+        await sendMail({email, userId: newUser.dataValues.id})
         return NextResponse.json({message: "User successfully registered.", status: 201, newUser});
     } catch (error: any) { 
         console.log(error);

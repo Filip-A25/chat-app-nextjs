@@ -7,7 +7,6 @@ export const GET = async (req: NextRequest) => {
         await authenticateDb(sequelize);
 
         const username = req.nextUrl.searchParams.get("username");
-        console.log(username);
         const trimmedUsername = username?.replace(/\s/g, "") || "";
 
         const user = await User.findOne({where: {username: trimmedUsername}});

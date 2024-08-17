@@ -14,11 +14,9 @@ export const POST = async (req: NextRequest) => {
         if (!email || !password) return NextResponse.json({message: "Incomplete data sent.", status: 400});
 
         const user = await User.findUserWithEmail(email);
-
         if (!user) return NextResponse.json({message: "User could not be found.", stauts: 404});
 
-        const isPasswordCorrect = bcryptjs.compare(password, user.dataValues.password);
-
+        const isPasswordCorrect = await bcryptjs.compare(password, user.dataValues.password);
         if (!isPasswordCorrect) return NextResponse.json({message: "Incorrect password entered.", status: 401});
 
         const tokenData = {

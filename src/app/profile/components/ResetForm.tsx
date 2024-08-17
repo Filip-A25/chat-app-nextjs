@@ -1,9 +1,10 @@
+"use client";
+
 import { useForm, FormProvider } from "react-hook-form";
 import { InputField } from "@/app/authentication/components";
 import { validation } from "@/app/authentication/const/authRequirements";
 import { Button } from "@/shared";
 import { UserTokenData } from "@/app/authentication/types";
-import { emailType } from "@/app/types";
 import { notifySuccessMessage, notifyErrorMessage } from "@/app/utils";
 import axios from "axios";
 
@@ -23,13 +24,12 @@ export function ResetForm({ user, setIsFormOpen }: Props) {
   const resetSubmit = async (data: ResetData) => {
     try {
       const response = await axios.post("/api/profile/resetPassword", {
-        email: user.email,
         userId: user.id,
-        type: emailType.reset,
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
       });
-      console.log(response);
-      notifySuccessMessage("E-mail for password reset has been sent.");
-      setIsFormOpen(true);
+      notifySuccessMessage("Password has been successfully reset.");
+      setIsFormOpen(false);
     } catch (error: any) {
       notifyErrorMessage("Something went wrong, please try again.");
       throw new Error(error.message);
@@ -39,16 +39,23 @@ export function ResetForm({ user, setIsFormOpen }: Props) {
   return (
     <FormProvider {...form}>
       <form id="reset-password-form" onSubmit={form.handleSubmit(resetSubmit)}>
-        <InputField
-          label="Enter your current password"
-          name="currentPassword"
-          validation={validation.password}
-        />
-        <InputField
-          label="Enter your new password"
-          name="newPassword"
-          validation={validation.password}
-        />
+        <h1 className="text-3xl font-semibold">Change your password</h1>
+        <div className="py-4">
+          <InputField
+            label="Current password"
+            name="currentPassword"
+            type="password"
+            placeholder="Enter your current password..."
+            validation={validation.password}
+          />
+          <InputField
+            label="New password"
+            name="newPassword"
+            type="password"
+            placeholder="Enter your new password..."
+            validation={validation.password}
+          />
+        </div>
         <Button title="Reset password" theme="secondary" />
       </form>
     </FormProvider>

@@ -24,6 +24,7 @@ export default function Login() {
   const onSubmit = async (data: LoginData) => {
     try {
       const response = await axios.post("/api/authentication/login", data);
+      if (!response.data.user) return notifyErrorMessage(response.data.message);
       setIsLoggedIn(true);
       notifyLoggedIn();
       router.push(paths.myChats);
