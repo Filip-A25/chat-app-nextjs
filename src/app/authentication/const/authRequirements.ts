@@ -16,7 +16,7 @@ export const validation = {
     email: {
         required: {
             value: true,
-            message: "Please enter an email address."
+            message: "Please enter an e-mail address."
         }
     },
     password: {

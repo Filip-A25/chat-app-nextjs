@@ -56,7 +56,7 @@ export default function Login() {
               name="password"
               type="password"
               placeholder="Enter your password..."
-              validation={validation.email}
+              validation={validation.password}
             />
           </div>
           <Button title="Login" theme="primary" />

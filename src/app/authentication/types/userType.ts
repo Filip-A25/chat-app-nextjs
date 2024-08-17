@@ -15,6 +15,5 @@ export interface UserTokenData {
     id: string;
     username: string;
     email: string;
-    activeChatRoom?: string;
     socketSessionId?: string;
 }
