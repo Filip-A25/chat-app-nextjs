@@ -25,7 +25,6 @@ export const POST = async (req: NextRequest) => {
         await sendMail({email, userId: newUser.dataValues.id})
         return NextResponse.json({message: "User successfully registered.", status: 201, newUser});
     } catch (error: any) { 
-        console.log(error);
         return NextResponse.json({error: error.message, status: 500});
     }
 }

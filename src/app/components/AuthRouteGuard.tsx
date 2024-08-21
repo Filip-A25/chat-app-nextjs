@@ -48,7 +48,7 @@ export const AuthRouteGuard: React.FC<PropsWithChildren> = ({ children }) => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, []);
+  }, [pathname]);
 
   if (isPageLoading) return <PageLoading isFullScreen />;
 

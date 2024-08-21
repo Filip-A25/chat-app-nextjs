@@ -31,7 +31,7 @@ export function useChat(socket: Socket) {
     }
 
     socket.connect();
-  }, [user, socket]);
+  }, [user]);
 
   useEffect(() => {
     const receiveSessionId = (id: string) => {

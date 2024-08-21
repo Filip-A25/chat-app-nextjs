@@ -5,6 +5,7 @@ import { userDataState } from "@/app/authentication/state";
 import { messengerArrayState, messengerFetchingState } from "../state";
 import { Socket } from "socket.io-client";
 import { Messenger } from "@/app/chat/types";
+import { notifyErrorMessage } from "@/app/utils";
 import axios from "axios";
 
 export function useSearchUser(socket: Socket) {
@@ -44,6 +45,10 @@ export function useSearchUser(socket: Socket) {
   };
 
   const onSubmit = ({ username }: { username: string }) => {
+    if (username === user.username) {
+      return notifyErrorMessage("You can't send messages to yourself.");
+    }
+
     setIsMessengerFetching(true);
     const messengerExists = messengers.find(
       (messenger) => messenger.username === username
@@ -64,11 +69,16 @@ export function useSearchUser(socket: Socket) {
   useEffect(() => {
     const handleGetMessenger = async ({ messengerId, username }: Messenger) => {
       try {
+        if (!messengerId || !username) {
+          return notifyErrorMessage("User could not be found.");
+        }
+
         const chat = await checkIfChatExists(messengerId);
         if (!chat) {
           const response = await createNewChat(messengerId);
           setChatId(response.data.chatId);
         }
+
         setMessengers((prevValue) => [
           ...prevValue,
           {
@@ -92,7 +102,19 @@ export function useSearchUser(socket: Socket) {
     return () => {
       socket.off("get_user", handleGetMessenger);
     };
-  }, []);
+  }, [chatId, socket]);
+
+  useEffect(() => {
+    const handleSearchUserError = (errorMessage: string) => {
+      notifyErrorMessage(errorMessage);
+    };
+
+    socket.on("user_search_error", handleSearchUserError);
+
+    return () => {
+      socket.off("user_search_error", handleSearchUserError);
+    };
+  }, [socket]);
 
   return { form, onSubmit };
 }

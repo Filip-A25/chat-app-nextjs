@@ -64,8 +64,8 @@ app.prepare().then(() => {
                 }
             }
 
-            if (!username) {
-                socket.emit("error", new Error(`User with username ${username} could not be found.`));
+            if (!searchedUser) {
+                return socket.emit("user_search_error", `User with username ${username} could not be found.`);
             }
             socket.emit("get_user", searchedUser);
         })
