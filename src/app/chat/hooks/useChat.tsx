@@ -1,25 +1,40 @@
-import { useState, useEffect } from "react";
+"use client";
+
+import { useEffect } from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { ChatMessage, ReceivedMessage } from "../types";
+import { ChatMessage, ChatMessageData, ReceivedMessage } from "../types";
 import { userDataState } from "@/app/authentication/state";
 import {
   activeMessengerState,
   messengerArrayState,
   messengerFetchingState,
+  chatState,
+  activeChatState,
 } from "@/app/chat/state";
 import { Socket } from "socket.io-client";
 
 export function useChat(socket: Socket) {
-  const [chat, setChat] = useState<ChatMessage[]>([]);
   const currentMessenger = useRecoilValue(activeMessengerState);
   const [user, setUser] = useRecoilState(userDataState);
   const [messengers, setMessengers] = useRecoilState(messengerArrayState);
   const [isMessengerFetching, setIsMessengerFetching] = useRecoilState(
     messengerFetchingState
   );
+  const [chats, setChats] = useRecoilState(chatState);
+  const activeChat = useRecoilValue(activeChatState);
 
-  const addMessageToChat = ({ message, username }: ChatMessage) => {
-    setChat((prevValue) => [...prevValue, { message, username }]);
+  const addMessageToChat = ({ chatId, username, message }: ChatMessageData) => {
+    setChats((prevChats) =>
+      prevChats.map((chat) => {
+        if (chat.chatId === chatId) {
+          return {
+            ...chat,
+            messages: [...(chat.messages || []), { username, message }],
+          };
+        }
+        return chat;
+      })
+    );
   };
 
   useEffect(() => {
@@ -56,7 +71,7 @@ export function useChat(socket: Socket) {
       senderUsername,
       chatId,
     }: ReceivedMessage) => {
-      const containsMessengers = messengers.length > 0 ? true : false;
+      const containsMessengers = Boolean(messengers.length) ? true : false;
       const hasIdenticalMessenger = messengers.some(
         (messenger) => messenger.messengerId === senderId
       );
@@ -72,9 +87,13 @@ export function useChat(socket: Socket) {
           },
         ]);
       }
+      const chatExists = chats.find((chat) => chat.chatId === chatId);
+      if (!chatExists) {
+        setChats((prevChats) => [...prevChats, { chatId }]);
+      }
 
       setIsMessengerFetching(false);
-      addMessageToChat({ message, username: senderUsername });
+      addMessageToChat({ chatId, message, username: senderUsername });
     };
 
     socket.on("receive_message", handleReceiveMessage);
@@ -86,7 +105,8 @@ export function useChat(socket: Socket) {
 
   useEffect(() => {
     const handleReceiveSentMessage = ({ message, username }: ChatMessage) => {
-      addMessageToChat({ message, username });
+      if (!currentMessenger?.chatId) throw new Error("Chat ID doesn't exist.");
+      addMessageToChat({ chatId: currentMessenger.chatId, message, username });
     };
 
     socket.on("receive_sent_message", handleReceiveSentMessage);
@@ -94,7 +114,7 @@ export function useChat(socket: Socket) {
     return () => {
       socket.off("receive_sent_message", handleReceiveSentMessage);
     };
-  }, [socket]);
+  }, [socket, currentMessenger?.chatId]);
 
-  return { currentMessenger, isMessengerFetching, chat };
+  return { currentMessenger, isMessengerFetching, activeChat };
 }

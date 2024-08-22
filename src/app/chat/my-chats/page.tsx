@@ -17,7 +17,7 @@ const socket = io(process.env.NEXT_PUBLIC_SOCKET_IO_SERVER_DOMAIN!, {
 });
 
 export default function MyChats() {
-  const { currentMessenger, isMessengerFetching, chat } = useChat(socket);
+  const { currentMessenger, isMessengerFetching, activeChat } = useChat(socket);
 
   return (
     <section className="h-full flex flex-col justify-center items-center relative">
@@ -40,7 +40,7 @@ export default function MyChats() {
           <>
             <ChatHeader username={currentMessenger.username} />
             <div className="w-full h-4/5 px-6 md:px-8 py-3 sm:py-4 md:pt-4 md:pb-3 absolute bottom-16 top-17 overflow-y-scroll">
-              {chat.map(({ username, message, timestamp }, index) => (
+              {activeChat?.messages?.map(({ username, message }, index) => (
                 <MessageCard
                   key={index}
                   username={username}

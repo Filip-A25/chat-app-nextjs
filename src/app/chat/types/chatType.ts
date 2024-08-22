@@ -3,6 +3,10 @@ import { DateDataType } from "sequelize";
 export interface ChatMessage {
     username: string;
     message: string;
+}
+
+export interface ChatMessageData extends ChatMessage {
+    chatId: string;
     timestamp?: DateDataType;
 }
 
@@ -16,7 +20,12 @@ export interface ReceivedMessage {
 export interface Messenger {
     messengerId: string;
     username: string;
-    isActive?: boolean;
-    messages?: ChatMessage[];
     chatId?: string;
+    messages?: ChatMessage[];
+    isActive?: boolean;
+}
+
+export interface Chat {
+    chatId: string;
+    messages?: ChatMessage[];
 }

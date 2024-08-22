@@ -79,9 +79,9 @@ app.prepare().then(() => {
                 }
                 const response = await axios.post("http://localhost:3000/api/chat/message", newMessage);
 
-                io.to(receiverId).emit("receive_message", {...newMessage, senderUsername: socket.username, to: receiverId, timestamp: response.data.created_at});
+                io.to(receiverId).emit("receive_message", {chatId, senderId: socket.userId, message, senderUsername: socket.username, to: receiverId, timestamp: response.data.created_at});
             
-                socket.emit("receive_sent_message", {username: socket.username, message, timestamp: response.data.created_at});
+                socket.emit("receive_sent_message", {chatId, username: socket.username, message, timestamp: response.data.created_at});
             } catch (error) {
                 console.log(error.message);
                 throw new Error(error.message);

@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { userDataState } from "@/app/authentication/state";
-import { messengerArrayState, messengerFetchingState } from "../state";
+import {
+  messengerArrayState,
+  messengerFetchingState,
+  chatState,
+} from "../state";
 import { Socket } from "socket.io-client";
 import { Messenger } from "@/app/chat/types";
 import { notifyErrorMessage } from "@/app/utils";
@@ -13,7 +17,7 @@ export function useSearchUser(socket: Socket) {
   const [messengers, setMessengers] = useRecoilState(messengerArrayState);
   const user = useRecoilValue(userDataState);
   const setIsMessengerFetching = useSetRecoilState(messengerFetchingState);
-  const [chatId, setChatId] = useState("");
+  const setChat = useSetRecoilState(chatState);
 
   const searchUser = (searchedUser: string) => {
     socket.emit("find_user", searchedUser);
@@ -37,7 +41,7 @@ export function useSearchUser(socket: Socket) {
           messengerId,
         },
       });
-      const chatId = response.data.chatId;
+      const chatId = response.data.chat.id;
       return chatId ? chatId : false;
     } catch (error: any) {
       throw new Error(error.message);
@@ -74,13 +78,21 @@ export function useSearchUser(socket: Socket) {
         }
 
         const chat = await checkIfChatExists(messengerId);
+        let chatId = chat;
         if (!chat) {
           const response = await createNewChat(messengerId);
-          setChatId(response.data.chatId);
+          chatId = response.data.chatId;
         }
 
-        setMessengers((prevValue) => [
-          ...prevValue,
+        setChat((prevValue) => [...prevValue, { chatId }]);
+
+        const newMessengerArray = messengers.map((messenger) => ({
+          ...messenger,
+          isActive: false,
+        }));
+
+        setMessengers([
+          ...newMessengerArray,
           {
             messengerId,
             username,
@@ -102,7 +114,7 @@ export function useSearchUser(socket: Socket) {
     return () => {
       socket.off("get_user", handleGetMessenger);
     };
-  }, [chatId, socket]);
+  }, [socket, messengers]);
 
   useEffect(() => {
     const handleSearchUserError = (errorMessage: string) => {
