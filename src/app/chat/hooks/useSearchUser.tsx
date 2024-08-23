@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { userDataState } from "@/app/authentication/state";
@@ -18,6 +18,7 @@ export function useSearchUser(socket: Socket) {
   const user = useRecoilValue(userDataState);
   const setIsMessengerFetching = useSetRecoilState(messengerFetchingState);
   const setChat = useSetRecoilState(chatState);
+  const [isResetReady, setIsResetReady] = useState(false);
 
   const searchUser = (searchedUser: string) => {
     socket.emit("find_user", searchedUser);
@@ -68,6 +69,7 @@ export function useSearchUser(socket: Socket) {
       return;
     }
     searchUser(username);
+    setIsResetReady(true);
   };
 
   useEffect(() => {
@@ -127,6 +129,12 @@ export function useSearchUser(socket: Socket) {
       socket.off("user_search_error", handleSearchUserError);
     };
   }, [socket]);
+
+  useEffect(() => {
+    if (!isResetReady) return;
+    form.reset();
+    setIsResetReady(false);
+  }, [form, isResetReady]);
 
   return { form, onSubmit };
 }
