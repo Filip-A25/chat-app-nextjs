@@ -1,7 +1,10 @@
 "use client";
 
 import React, { PropsWithChildren, useEffect, useState } from "react";
-import { loggedState, userDataState } from "@/app/authentication/state";
+import {
+  loggedState,
+  userDataState,
+} from "@/app/(modules)/authentication/state";
 import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil";
 import { Navigate, PageLoading } from "@/shared";
 import { usePathname } from "next/navigation";

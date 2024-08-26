@@ -13,6 +13,6 @@
 
 @layer utilities {
   .standard-button {
-    @apply w-48 md:w-52 h-12 rounded-r-full rounded-l-full hover:shadow-md transition hover:transition hover:-translate-y-1 font-[500] text-sm;
+    @apply w-48 md:w-52 h-12 my-1 rounded-r-full rounded-l-full font-[500] text-sm;
   }
 }

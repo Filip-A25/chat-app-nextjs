@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import errorIcon from "@/assets/error-icon.png";
-import { loggedState } from "@/app/authentication/state";
+import { loggedState } from "@/app/(modules)/authentication/state";
 import { useRecoilValue } from "recoil";
 import { paths } from "@/app/types";
 

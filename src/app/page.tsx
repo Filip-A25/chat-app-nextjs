@@ -36,6 +36,7 @@ export default function Home() {
             title="Create a new account"
             theme="secondary"
             handleClick={() => router.push(paths.register)}
+            isAnimated
           />
         </section>
       </div>

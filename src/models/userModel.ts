@@ -1,5 +1,5 @@
 import {DataTypes, Model} from "sequelize";
-import {UserModel} from "@/app/authentication/types";
+import {UserModel} from "@/app/(modules)/authentication/types";
 import { sequelize } from "@/database/sequelize";
 
 class User extends Model {

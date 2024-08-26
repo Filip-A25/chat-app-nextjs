@@ -1,6 +1,6 @@
 import {DataTypes, Model} from "sequelize";
 import { sequelize } from "@/database/sequelize";
-import { Message } from "@/app/chat/types/messageType";
+import { Message } from "@/app/(modules)/chat/types/messageType";
 
 class ChatMessage extends Model {
     static async createChatMessage({chatId, senderId, message}: Message) {

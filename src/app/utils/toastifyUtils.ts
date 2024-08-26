@@ -8,10 +8,6 @@ export const notifyLoggedIn = () => {
     toast.success("Successfully logged in.");
 }
 
-export const notifyLoggedOut = () => {
-    toast.success("Successfully logged out.");
-}
-
 export const notifySuccessMessage = (message: string) => {
     toast.success(message);
 } 

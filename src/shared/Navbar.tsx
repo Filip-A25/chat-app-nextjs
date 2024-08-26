@@ -5,9 +5,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { paths } from "@/app/types";
 import paperIcon from "@/assets/paper-plane-icon-light.png";
-import { loggedState, userDataState } from "@/app/authentication/state";
+import {
+  loggedState,
+  userDataState,
+} from "@/app/(modules)/authentication/state";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { notifyErrorMessage, notifyLoggedOut } from "@/app/utils";
+import { notifyErrorMessage } from "@/app/utils";
 import axios from "axios";
 
 export function Navbar() {
@@ -19,7 +22,6 @@ export function Navbar() {
     try {
       await axios.get("/api/authentication/logout");
       setIsLoggedIn(false);
-      notifyLoggedOut();
       router.push("/");
     } catch (error: any) {
       notifyErrorMessage(error.message);
@@ -53,7 +55,7 @@ export function Navbar() {
             </Link>
             <button
               onClick={handleLogout}
-              className="text-whitesmoke hover:text-red-400 hover:transition"
+              className="text-whitesmoke text-md hover:text-red-400 hover:transition"
             >
               Logout
             </button>
